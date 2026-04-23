@@ -175,13 +175,13 @@ def create_visualization(save_dir):
     # 第2组
     valid_mask2 = ~np.isnan(f2_vals)
     if np.any(valid_mask2):
-        lambda_2, sigma2 = StressOptimization(2*R0, r2_vals[valid_mask2], f2_vals[valid_mask2])
-    ax.plot(lambda_2, 2*sigma2, color='blue', linewidth=lines_linewidth, label='N = 4', zorder=2)
+        lambda_2, sigma2 = StressOptimization(R0, r2_vals[valid_mask2], f2_vals[valid_mask2])
+    ax.plot(lambda_2, sigma2, color='blue', linewidth=lines_linewidth, label='N = 4', zorder=2)
     # 第3组
     valid_mask3 = ~np.isnan(f3_vals)
     if np.any(valid_mask3):
-        lambda_3, sigma3 = StressOptimization(3*R0, r3_vals[valid_mask3], f3_vals[valid_mask3])
-    ax.plot(lambda_3, 3*sigma3, color='purple', linewidth=lines_linewidth, label='N = 6', zorder=2)
+        lambda_3, sigma3 = StressOptimization(R0, r3_vals[valid_mask3], f3_vals[valid_mask3])
+    ax.plot(lambda_3, sigma3, color='purple', linewidth=lines_linewidth, label='N = 6', zorder=2)
 
     # 设置标签和标题
     ax.set_xlabel('Stretch ratio $\lambda$', fontsize=label_fontsize)
@@ -198,7 +198,7 @@ def create_visualization(save_dir):
     
     # 设置坐标轴范围
     ax.set_xlim(1.0, 2.0)
-    ax.set_ylim(0.0, 50.0)
+    ax.set_ylim(0.0, 5.0)
     
     # 设置刻度参数
     ax.tick_params(axis='both', which='major', 
