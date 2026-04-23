@@ -1,0 +1,13 @@
+parameter,value,description
+num_samples,100,采样数量
+E,3,ΔE值
+U0,10,U0值
+mu_xi_f,3,ξ_f分布的均值
+sigma_xi_f,2.5,ξ_f分布的标准差
+xi_f_min,0.5,ξ_f最小值
+xi_f_max,5.5,ξ_f最大值
+f_min,0,f的最小值
+f_max,5,f的最大值
+f_points,1000,f的采样点数
+n_grid_points,100,n的网格点数
+r_grid_points,1000,r的网格点数

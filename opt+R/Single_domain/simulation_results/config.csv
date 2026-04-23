@@ -1,0 +1,7 @@
+parameter,value,description
+num_samples,300,采样数量
+k,2,ξ_u = k * ξ_f 的系数
+Ek,1,能量缩放系数 (delta_E = Ek * ξ_u^3)
+Uk,3,周期势缩放系数 (U0 = Uk * ξ_u^3)
+n_grid_points,10000,n的均匀划分点数
+num_r_points,1000,每个采样的r值点数

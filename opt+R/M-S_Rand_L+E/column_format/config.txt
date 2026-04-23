@@ -1,0 +1,11 @@
+=== 配置参数 ===
+a = 0.0
+U0 = 10.0
+xi = 30.0
+L_mu = 350.0
+L_sigma = 50.0
+E_mu = 10.0
+E_sigma = 3.0
+num_samples = 100
+r_points = 2000
+scan_points = 1000

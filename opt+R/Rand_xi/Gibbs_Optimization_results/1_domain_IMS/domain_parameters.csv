@@ -1,0 +1,10 @@
+Parameter,Value
+xi_f,10.0
+E0,1.0
+Ek,2.0
+k,2.0
+DeltaE,11.0
+r_grid,100.0
+n_grid,10.0
+f_grid,500.0
+f_max,4.0

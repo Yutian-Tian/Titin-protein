@@ -1,0 +1,11 @@
+Region,Area,Black_Line_Value,Start_R,End_R,Integration_Type
+a,26.4844,4.6,37.56,44.8398,f_red - f_black
+a',26.2189,4.6,44.8398,58.66,f_black - f_red
+b,26.0586,5.49,61.48,69.6847,f_red - f_black
+b',25.8226,5.49,69.6847,83.22,f_black - f_red
+c,26.6374,6.35,86.14,95.04,f_red - f_black
+c',25.6564,6.35,95.04,108.34,f_black - f_red
+d,26.0948,7.2,111.36,120.566,f_red - f_black
+d',26.5278,7.2,120.566,133.94,f_black - f_red
+e,26.9513,8.04,136.98,146.602,f_red - f_black
+e',26.8471,8.04,146.602,159.86,f_black - f_red
