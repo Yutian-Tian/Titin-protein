@@ -1,15 +1,18 @@
 """
+目的：用于将理论模型与实验数据进行对比
+此程序直接使用M-S公式，tanh函数进行数值实验
+"""
+
+"""
 目的：用于比较2 domian、4 domain和6 domain的本构曲线
 输入：读取3组平均拉伸行为的数据
 输出：可视化三组本构曲线
 """
 
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 import os
-from scipy.interpolate import interp1d
 import sys
 
 # ============ 字体设置 ============
@@ -91,12 +94,34 @@ plt.rcParams.update({
 # 基本参数
 xi_f = 5.0  # 折叠态持续长度
 alpha = 7.0      # 解折叠系数
-E0 = 1.0     # 能量基准值
-Ek = 4.0     # 能量系数
 Nmax = 6.0     # domain 的数量
 k1 = 10.0
 k2 = 1.35
 R0 = 5.0    # 初始首末端距离
+f_limit = 10.0
+
+
+def contourLength(force, N):
+    """force 表示外力"""
+    Lc = N*xi_f*(0.5*(alpha + 1.0) + 0.5*(alpha - 1.0)*np.tanh(k1*(force - k2)))
+    return Lc
+
+
+def MSforce(r, Lc):
+    x = np.asarray(r, dtype=float) / np.asarray(Lc, dtype=float)
+    force = np.where(x < 1.0,
+                     0.25 * ((1 - x) ** (-2) - 1 + 4 * x),
+                     np.inf)
+    return force
+
+
+def end_to_end_factor2(force):
+    """
+    WLC的f(x)的近似反函数
+    """
+    a = 4/3*(2 + np.tanh(0.1*(force - 2)))
+    x = 1 - 1/np.sqrt(a*force + 1)
+    return x
 
 
 def StressOptimization(R0, r_val, f_val):
@@ -144,44 +169,32 @@ def StressOptimization(R0, r_val, f_val):
 
 def create_visualization(save_dir):
     """创建可视化图表"""
-
+    f_vals = np.linspace(0, f_limit, 1000)
 
     # ============ 创建3组3-chain model的本构曲线：N=2, N=4, N=6============
     fig, ax = plt.subplots(1, 1, figsize=(12, 9))
 
-    file_path1 = os.path.join(save_dir,"2_100_C_file/average_curves.csv")
-    file_path2 = os.path.join(save_dir,"4_100_C_file/average_curves.csv")
-    file_path3 = os.path.join(save_dir,"6_100_C_file/average_curves.csv")
-
-    #读取第1组数据
-    df1 = pd.read_csv(file_path1, header=0)
-    f1_vals = df1.iloc[:, 0].astype(float).values
-    r1_vals = df1.iloc[:, 1].astype(float).values
-    #读取第2组数据
-    df2 = pd.read_csv(file_path2, header=0)
-    f2_vals = df2.iloc[:, 0].astype(float).values
-    r2_vals = df2.iloc[:, 1].astype(float).values
-    #读取第3组数据
-    df3 = pd.read_csv(file_path3, header=0)
-    f3_vals = df3.iloc[:, 0].astype(float).values
-    r3_vals = df3.iloc[:, 1].astype(float).values
-
-    # 数值曲线：红色
+    # 理论曲线
     # 第1组
-    valid_mask1 = ~np.isnan(f1_vals)
+    r1_vals = end_to_end_factor2(f_vals)*contourLength(f_vals, 2)
+    valid_mask1 = ~np.isnan(f_vals)
     if np.any(valid_mask1):
-        lambda_1, sigma1 = StressOptimization(R0, r1_vals[valid_mask1], f1_vals[valid_mask1])
-    ax.plot(lambda_1, sigma1, color='red', linewidth=lines_linewidth, label='N = 2', zorder=2)
+        lambda_1, sigma1 = StressOptimization(R0, r1_vals[valid_mask1], f_vals[valid_mask1])
+    ax.plot(lambda_1, sigma1, 'o-', markersize=3, color='red', linewidth=lines_linewidth, label='N = 2', zorder=2)
+
     # 第2组
-    valid_mask2 = ~np.isnan(f2_vals)
+    r2_vals = end_to_end_factor2(f_vals)*contourLength(f_vals, 4)
+    valid_mask2 = ~np.isnan(f_vals)
     if np.any(valid_mask2):
-        lambda_2, sigma2 = StressOptimization(2*R0, r2_vals[valid_mask2], f2_vals[valid_mask2])
-    ax.plot(lambda_2, 2*sigma2, color='blue', linewidth=lines_linewidth, label='N = 4', zorder=2)
+        lambda_2, sigma2 = StressOptimization(2*R0, r2_vals[valid_mask2], f_vals[valid_mask2])
+    ax.plot(lambda_2, 2*sigma2, '-', markersize=3, color='blue', linewidth=lines_linewidth, label='N = 4', zorder=2)
+
     # 第3组
-    valid_mask3 = ~np.isnan(f3_vals)
+    r3_vals = end_to_end_factor2(f_vals)*contourLength(f_vals, 6)
+    valid_mask3 = ~np.isnan(f_vals)
     if np.any(valid_mask3):
-        lambda_3, sigma3 = StressOptimization(3*R0, r3_vals[valid_mask3], f3_vals[valid_mask3])
-    ax.plot(lambda_3, 3*sigma3, color='purple', linewidth=lines_linewidth, label='N = 6', zorder=2)
+        lambda_3, sigma3 = StressOptimization(3*R0, r3_vals[valid_mask3], f_vals[valid_mask3])
+    ax.plot(lambda_3, 3*sigma3, 's-', markersize=3, color='purple', linewidth=lines_linewidth, label='N = 6', zorder=2)
 
     # 设置标签和标题
     ax.set_xlabel('Stretch ratio $\lambda$', fontsize=label_fontsize)
@@ -240,7 +253,7 @@ def create_visualization(save_dir):
 
 def main():
 
-    save_dir = "/home/tyt/project/Single-chain/opt+R/Rand_xi/Gibbs_Optimization_results/100_chains_IMS"
+    save_dir = "/home/tyt/project/Single-chain/opt+R/Rand_xi/Gibbs_Optimization_results"
 
     create_visualization(save_dir)
 

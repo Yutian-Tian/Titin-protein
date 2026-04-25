@@ -23,7 +23,7 @@ sigma = 3.0              # xi_f 标准差
 delta = 3.0              # 截断范围 [μ-δ, μ+δ]
 
 # 物理参数
-alpha = 2.0              # xi_u = alpha * xi_f
+alpha = 4.0              # xi_u = alpha * xi_f
 r_grids = 200            # 每条链独立使用的拉伸长度网格点数【调试时减小】
 
 # 优化参数
