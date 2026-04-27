@@ -26,7 +26,7 @@ output_dir = os.path.join(data_dir, "Figure")   # 可以改为其他目录
 output_file = os.path.join(output_dir, "f_r_curve.png") if output_dir else None
 
 # ==================== 物理参数（必须与代码一一致） ====================
-alpha = 4.0          # xi_u = alpha * xi_f  (代码一中的 alpha)
+alpha = 2.0          # xi_u = alpha * xi_f  (代码一中的 alpha)
 r_grids = 1000       # 每条链原始网格点数（代码一中的 r_grids）
 common_grid_points = 1000   # 公共网格点数（可自行调整）
 

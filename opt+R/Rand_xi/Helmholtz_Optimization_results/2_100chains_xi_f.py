@@ -16,15 +16,21 @@ output_dir = "/home/tyt/project/Single-chain/opt+R/Rand_xi/Helmholtz_Optimizatio
 os.makedirs(output_dir, exist_ok=True)
 
 # 采样参数
+# 随机种子（保证结果可重复）
+RANDOM_SEED = 42          # 可修改为任意整数
+np.random.seed(RANDOM_SEED)
+
 N_samples = 100          # 样本数（链的条数）【调试时减小，正式计算可改回100】
 Num = 2                  # 每条链包含的domain数
-mu = 10.0                 # xi_f 高斯分布的均值
-sigma = 3.0              # xi_f 标准差
+mu = 20.0                 # xi_f 高斯分布的均值
+sigma = 7.0              # xi_f 标准差
 delta = 3.0              # 截断范围 [μ-δ, μ+δ]
+E0 = 5.0
+Ek = 4.0
 
 # 物理参数
-alpha = 4.0              # xi_u = alpha * xi_f
-r_grids = 200            # 每条链独立使用的拉伸长度网格点数【调试时减小】
+alpha = 2.0              # xi_u = alpha * xi_f
+r_grids = 500            # 每条链独立使用的拉伸长度网格点数【调试时减小】
 
 # 优化参数
 init_points = 30         # 初始粗网格点数
@@ -183,8 +189,8 @@ def main():
     print(f"Step 1 完成：xi_f 采样已保存至 {xi_f_path}")
 
     # ---------- Step 2: 根据 xi_f 计算 ΔE ----------
-    DeltaE1_samples = 5 + 4 * (xi_f1_samples - mu + delta)
-    DeltaE2_samples = 5 + 4 * (xi_f2_samples - mu + delta)
+    DeltaE1_samples = E0 + Ek * (xi_f1_samples - mu + delta)
+    DeltaE2_samples = E0 + Ek * (xi_f2_samples - mu + delta)
 
     energy_path = os.path.join(output_dir, 'DeltaE.csv')
     df_energy = pd.DataFrame({
