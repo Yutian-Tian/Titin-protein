@@ -22,9 +22,11 @@ const int N_samples = 100;          // 样本数（链数）
 const int Num = 2;                  // 每条链的domain数
 const double mu = 20.0;             // xi_f 高斯分布均值
 const double sigma = 7.0;           // xi_f 标准差
-const double delta = 3.0;           // 截断范围 [mu-delta, mu+delta]
+const double delta = 5.0;           // 截断范围 [mu-delta, mu+delta]
 
 const double alpha = 2.0;           // xi_u = alpha * xi_f
+const double E0 = 5.0;              // 能量的最小值
+const double Ek = 2.0;           // 能量与xi_f的系数
 const int r_grids = 500;            // 每条链的拉伸长度网格点数
 
 const int init_points = 30;         // 初始粗网格点数
@@ -37,7 +39,7 @@ const double GOLDEN_RATIO = 1.6180339887498948482;
 const double GOLDEN_SECTION_TOL = 1e-8;
 const int MAX_GOLDEN_ITER = 100;
 
-const string output_dir = "/home/tyt/project/Single-chain/opt+R/Rand_xi/Helmholtz_Optimization_results/2-domain_xi_f_sampling_results";   // 请确保目录存在
+const string output_dir = "/home/tyt/project/Single-chain/opt+R/Rand_xi/Helmholtz_Optimization_results/2-domain_xi_f_pall_results";   // 请确保目录存在
 
 // ==================== 辅助函数 ====================
 vector<double> linspace(double start, double end, int num) {
@@ -282,8 +284,8 @@ int main() {
     vector<double> DeltaE1_samples(N_samples);
     vector<double> DeltaE2_samples(N_samples);
     for (int i = 0; i < N_samples; ++i) {
-        DeltaE1_samples[i] = 5.0 + 4.0 * (xi_f1_samples[i] - mu + delta);
-        DeltaE2_samples[i] = 5.0 + 4.0 * (xi_f2_samples[i] - mu + delta);
+        DeltaE1_samples[i] = E0 + Ek * (xi_f1_samples[i] - mu + delta);
+        DeltaE2_samples[i] = E0 + Ek * (xi_f2_samples[i] - mu + delta);
     }
 
     ofstream energy_file(output_dir + "/DeltaE.csv");

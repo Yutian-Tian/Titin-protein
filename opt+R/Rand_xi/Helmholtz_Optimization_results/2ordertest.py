@@ -12,7 +12,7 @@ from scipy.optimize import minimize_scalar
 
 # 参数设置
 xi_f1 = 5.0    # 第一个domain的折叠态长度
-k = 7.0        # k = xi_ui/xi_fi
+k = 2.0        # k = xi_ui/xi_fi
 alpha = 0.5    # alpha = delta_Ei/xi_fi**2 (将被循环覆盖)
 beta = 1.0     # beta = xi_f2/xi_f1       (将被循环覆盖)
 E0 = 1.0
