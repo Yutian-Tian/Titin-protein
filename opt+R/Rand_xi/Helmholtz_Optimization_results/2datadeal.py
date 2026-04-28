@@ -78,7 +78,7 @@ plt.rcParams.update({
 
 # ============ 物理参数 ============
 xi_f1 = 5.0          # 第一个domain的折叠态长度
-k = 7.0              # k = xi_ui/xi_fi
+k = 2.0              # k = xi_ui/xi_fi
 gamma_default = 1.1  # 默认 gamma 值（当文件中无法解析时使用）
 beta_default = 0.7   # 默认 beta 值
 force_limit = 5.0
